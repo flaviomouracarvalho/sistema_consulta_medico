@@ -1,0 +1,38 @@
+name: Spring CI/CD
+
+on:
+  push:
+    branches: [main]  # Executa a cada push na main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Compilar projeto
+        run: mvn clean compile
+
+      - name: Executar testes
+        run: mvn test
+
+      - name: Build do JAR
+        run: mvn package -DskipTests
+
+      - name: Verificar artefato
+        run: ls target/*.jar
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy (exemplo)
+        run: echo "rodar deploy real aqui"
