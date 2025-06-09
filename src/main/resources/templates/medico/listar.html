@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(
+          ~{fragments/header :: head(~{})},
+          ~{::main}
+      )}">
+
+<main>
+    <div class="container mt-4">
+        <h1>Lista de Médicos</h1>
+        <!-- Campo de busca por nome -->
+        <form class="d-flex mb-3" method="get" th:action="@{/medicos}">
+            <input class="form-control me-2" type="search" name="keyword" placeholder="Buscar por nome..."
+                   th:value="${param.keyword}">
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+        <a th:href="@{/medicos/novo}" class="btn btn-primary mb-3">Novo Médico</a>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Telefone</th>
+                <th>CRM</th>
+                <th>Email</th>
+                <th>Idade</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="medico : ${medicos}">
+                <td th:text="${medico.nome}"></td>
+                <td th:text="${medico.cpf}"></td>
+                <td th:text="${medico.telefone}"></td>
+                <td th:text="${medico.crm}"></td>
+                <td th:text="${medico.email}"></td>
+                <td th:text="${medico.idade}"></td>
+                <td>
+                    <a th:href="@{'/medicos/editar/' + ${medico.id}}" class="btn btn-warning btn-sm">Editar</a>
+                    <a th:href="@{'/medicos/excluir/' + ${medico.id}}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Tem certeza que deseja excluir este médico?');">Excluir</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</html>

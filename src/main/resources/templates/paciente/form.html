@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(
+          ~{fragments/header :: head(~{})},
+          ~{::main}
+      )}">
+
+<main>
+    <div class="container mt-4">
+        <h1 th:text="${paciente.id == null} ? 'Novo Paciente' : 'Editar Paciente'">Paciente</h1>
+
+        <form th:action="@{/pacientes/salvar}" th:object="${paciente}" method="post">
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome:</label>
+                <input type="text" th:field="*{nome}" class="form-control" id="nome">
+                <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="cpf" class="form-label">CPF:</label>
+                <input type="text" th:field="*{cpf}" class="form-control" id="cpf">
+                <div class="text-danger" th:if="${#fields.hasErrors('cpf')}" th:errors="*{cpf}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="telefone" class="form-label">Telefone:</label>
+                <input type="text" th:field="*{telefone}" class="form-control" id="telefone">
+                <div class="text-danger" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email:</label>
+                <input type="email" th:field="*{email}" class="form-control" id="email">
+                <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="idade" class="form-label">Idade:</label>
+                <input type="number" th:field="*{idade}" class="form-control" id="idade" min="0">
+                <div class="text-danger" th:if="${#fields.hasErrors('idade')}" th:errors="*{idade}"></div>
+            </div>
+
+            <button type="submit" class="btn btn-success">Salvar</button>
+            <a th:href="@{/pacientes}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</main>
+
+</html>

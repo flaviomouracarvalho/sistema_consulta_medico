@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(
+          ~{fragments/header :: head(~{})},
+          ~{::main}
+      )}">
+
+<main>
+    <div class="container mt-4">
+        <h1 th:text="${consulta == null or consulta.id == null} ? 'Nova Consulta' : 'Editar Consulta'">Consulta</h1>
+
+        <form th:action="@{/consultas/nova}" method="get">
+            <div class="mb-3">
+                <label for="medico" class="form-label">Médicos:</label>
+                <select name="medicoId" class="form-select" id="medico" required>
+                    <option value="" selected>Selecione um Médico</option>
+                    <option th:each="m : ${medicos}"
+                            th:value="${m.id}"
+                            th:text="${m.getNome()}"
+                            th:selected="${m.id} == ${medicoId}">
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Buscar Agendas</button>
+        </form>
+
+
+        <form th:action="@{/consultas/salvar}" th:object="${consulta}" method="post">
+            <input type="hidden" th:field="*{id}" />
+
+            <!-- Agenda -->
+            <div class="mb-3">
+                <label for="agenda" class="form-label">Agendas:</label>
+                <select th:field="*{agenda}" class="form-select" id="agenda" required>
+                    <option value="" selected>Selecione uma Agenda</option>
+                    <option th:each="a : ${agendas}"
+                            th:value="${a.id}"
+                            th:text="${a.text()}">
+                    </option>
+                </select>
+                <div class="text-danger" th:if="${#fields.hasErrors('paciente')}" th:errors="*{paciente}"></div>
+            </div>
+
+            <!-- Valor -->
+            <div class="mb-3">
+                <label for="valor" class="form-label">Valor:</label>
+                <input type="number" step="0.01" th:field="*{valor}" class="form-control" id="valor" required>
+                <div class="text-danger" th:if="${#fields.hasErrors('valor')}" th:errors="*{valor}"></div>
+            </div>
+
+            <!-- Observação -->
+            <div class="mb-3">
+                <label for="observacao" class="form-label">Observação:</label>
+                <textarea th:field="*{observacao}" class="form-control" id="observacao"></textarea>
+                <div class="text-danger" th:if="${#fields.hasErrors('observacao')}" th:errors="*{observacao}"></div>
+            </div>
+
+            <!-- Paciente -->
+            <div class="mb-3">
+                <label for="paciente" class="form-label">Paciente:</label>
+                <select th:field="*{paciente}" class="form-select" id="paciente" required>
+                    <option value="" selected>Selecione um paciente</option>
+                    <option th:each="paciente : ${pacientes}"
+                            th:value="${paciente.id}"
+                            th:text="${paciente.nome}">
+                    </option>
+                </select>
+                <div class="text-danger" th:if="${#fields.hasErrors('paciente')}" th:errors="*{paciente}"></div>
+            </div>
+
+            <!-- Botões -->
+            <button type="submit" class="btn btn-success">Salvar</button>
+            <a th:href="@{/consultas}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</main>
+
+</html>

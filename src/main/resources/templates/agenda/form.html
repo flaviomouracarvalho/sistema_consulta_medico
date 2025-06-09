@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(
+        ~{fragments/header :: head(~{})},
+        ~{::main}
+      )}">
+
+<main>
+    <div class="container mt-4">
+        <h2>Cadastrar Disponibilidade</h2>
+
+        <p th:if="${erro}" class="alert alert-danger" th:text="${erro}"></p>
+
+        <form th:action="@{/agenda/salvar}" method="post" th:object="${agenda}">
+            <div class="mb-3">
+                <select th:field="*{medicoId}" class="form-select" required>
+                    <option value=""  selected>Selecione um médico</option>
+                    <option th:each="medico : ${medicos}"
+                            th:value="${medico.id}"
+                            th:text="${medico.nome}">
+                    </option>
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+                <label for="dataHoraInicio" class="form-label">Data e Hora Início:</label>
+                <input id="dataHoraInicio" type="datetime-local" th:field="*{dataHoraInicio}" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="dataHoraFim" class="form-label">Data e Hora Fim:</label>
+                <input id="dataHoraFim" type="datetime-local" th:field="*{dataHoraFim}" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </form>
+
+    </div>
+</main>
+</html>

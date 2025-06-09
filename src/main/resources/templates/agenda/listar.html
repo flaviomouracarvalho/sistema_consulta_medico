@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(
+        ~{fragments/header :: head(~{})},
+        ~{::main}
+      )}">
+
+<main>
+  <div class="container mt-4">
+    <h2>Agendas Cadastradas</h2>
+
+    <p th:if="${mensagem}" class="alert alert-info" th:text="${mensagem}"></p>
+
+    <a href="/agenda/nova" class="btn btn-primary mb-3">Nova Disponibilidade</a>
+
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Início</th>
+        <th>Fim</th>
+        <th>Médico</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="agenda : ${agendas}">
+        <td th:text="${#temporals.format(agenda.dataHoraInicio, 'dd/MM/yyyy HH:mm')}"></td>
+        <td th:text="${#temporals.format(agenda.dataHoraFim, 'dd/MM/yyyy HH:mm')}"></td>
+        <td th:text="${agenda.medico.nome}"></td>
+        <td th:text="${agenda.status}"></td>
+        <td>
+          <form th:action="@{'/agenda/cancelar/' + ${agenda.id}}" method="post"
+                th:if="${agenda.status.name() != 'CANCELADO'}">
+            <button type="submit" class="btn btn-danger btn-sm">Cancelar</button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</html>

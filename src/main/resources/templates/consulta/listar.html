@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(
+          ~{fragments/header :: head(~{})},
+          ~{::main}
+      )}">
+
+<body> <!-- Só necessário se o layout não já incluir <body> -->
+
+<main>
+    <div class="container mt-5">
+        <h2>Consultas</h2>
+
+        <!-- Campo de busca por data -->
+        <form class="d-flex mb-3" method="get" th:action="@{/consultas}">
+            <input class="form-control me-2" type="date" name="keyword" th:value="${param.keyword}">
+            <button class="btn btn-outline-success" type="submit">Buscar</button>
+        </form>
+
+        <a th:href="@{/consultas/nova}" class="btn btn-primary mb-3">Nova Consulta</a>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Inicio</th>
+                <th>Fim</th>
+                <th>Valor</th>
+                <th>Observação</th>
+                <th>Paciente</th>
+                <th>Médico</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${consultas}">
+                <td th:text="${#temporals.format(c.agenda.dataHoraInicio, 'dd/MM/yyyy HH:mm')}">Início</td>
+                <td th:text="${#temporals.format(c.agenda.dataHoraInicio, 'dd/MM/yyyy HH:mm')}">Fim</td>
+                <td th:text="${c.valor}">Valor</td>
+                <td th:text="${c.observacao}">Observação</td>
+                <td th:text="${c.paciente.nome}">Paciente</td>
+                <td th:text="${c.agenda.medico.nome}">Médico</td>
+                <td>
+                    <a th:href="@{/consultas/editar/{id}(id=${c.id})}" class="btn btn-warning btn-sm">Editar</a>
+                    <a th:href="@{/consultas/excluir/{id}(id=${c.id})}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Tem certeza que deseja excluir esta consulta?')">Excluir</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>
